@@ -10,6 +10,7 @@ public class JsonParserMenu {
             System.out.println("1. Open file");
             System.out.println("2. Close file");
             System.out.println("3. Save file");
+
             System.out.println("4. Save as");
             System.out.println("5. Validate");
             System.out.println("6. Print");
