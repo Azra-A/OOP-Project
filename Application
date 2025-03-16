@@ -1,0 +1,27 @@
+package bg.tu_varna.sit.а1.f23621627.project;
+
+import java.util.Scanner;
+
+public class Application {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        CommandProcessor processor = new CommandProcessor();
+
+        System.out.println("JSON Parser started. Type 'help' for available commands.");
+
+        while (true) {
+            System.out.print("> ");
+            String input = scanner.nextLine().trim();
+
+            if (input.equalsIgnoreCase("exit")) {
+                System.out.println("Exiting JSON Parser...");
+                break;
+            }
+
+            processor.processCommand(input);
+        }
+
+        scanner.close();
+    }
+}
+
