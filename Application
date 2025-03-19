@@ -7,7 +7,7 @@ public class Application {
         Scanner scanner = new Scanner(System.in);
         CommandProcessor processor = new CommandProcessor();
 
-        System.out.println("JSON Parser started. Type 'help' for available commands.");
+        System.out.println("JSON Parser started.");
 
         while (true) {
             System.out.print("> ");
