@@ -1,0 +1,20 @@
+package bg.tu_varna.sit.а1.f23621627.project.core;
+
+import bg.tu_varna.sit.а1.f23621627.project.commands.*;
+
+import java.util.*;
+
+public class CommandFactory {
+    private final Map<String, Command> commands;
+
+    public CommandFactory() {
+        commands = new HashMap<>();
+        commands.put("help", new HelpCommand());
+
+        //TODO: create the other commands
+    }
+
+    public Command createCommand(String commandName) {
+        return commands.getOrDefault(commandName.toLowerCase(), null);
+    }
+}
