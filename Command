@@ -1,5 +1,5 @@
 package bg.tu_varna.sit.а1.f23621627.project.commands;
 
 public interface Command {
-    public void execute(String[] args);
+        public void execute(String arguments);
 }
