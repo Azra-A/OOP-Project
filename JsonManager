@@ -71,5 +71,9 @@ public class JsonManager {
     public void markModified() {
         isModified = true;
     }
-}
 
+    public JSONObject getJsonObject() {
+        return jsonObject;
+    }
+
+}
