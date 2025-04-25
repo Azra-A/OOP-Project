@@ -1,0 +1,122 @@
+package bg.tu_varna.sit.a1.f23621627.project.core;
+
+import org.json.JSONObject;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+public class JsonManager {
+    private JSONObject jsonObject;
+    private String filePath;
+    private boolean isModified;
+
+    public void open(String path) {
+        try {
+            String content = new String(Files.readAllBytes(Paths.get(path)));
+            this.jsonObject = new JSONObject(content);
+            this.filePath = path;
+            this.isModified = false;
+            System.out.println("Файлът е отворен успешно.");
+        } catch (IOException e) {
+            System.out.println("Грешка при отваряне на файла: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Невалиден JSON формат: " + e.getMessage());
+        }
+    }
+
+    public void close() {
+        if (jsonObject != null) {
+            jsonObject = null;
+            filePath = null;
+            isModified = false;
+            System.out.println("Файлът е затворен.");
+        } else {
+            System.out.println("Няма отворен файл.");
+        }
+    }
+
+    public void save() {
+        if (jsonObject != null && filePath != null) {
+            try {
+                Files.write(Paths.get(filePath), jsonObject.toString(4).getBytes());
+                isModified = false;
+                System.out.println("Файлът е записан успешно.");
+            } catch (IOException e) {
+                System.out.println("Грешка при записване на файла: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Няма отворен файл за запис.");
+        }
+    }
+
+    public void saveAs(String path) {
+        if (jsonObject != null) {
+            try {
+                Files.write(Paths.get(path), jsonObject.toString(4).getBytes());
+                filePath = path;
+                isModified = false;
+                System.out.println("Файлът е записан като нов успешно.");
+            } catch (IOException e) {
+                System.out.println("Грешка при записване на новия файл: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Няма отворен файл за запис.");
+        }
+    }
+
+    public boolean hasUnsavedChanges() {
+        return isModified;
+    }
+
+    public void markModified() {
+        isModified = true;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+import org.json.JSONObject;
+import java.io.IOException;
+import java.nio.file.*;
+
+public class JsonManager {
+    private JSONObject jsonObject = new JSONObject();
+
+    public void loadJson(String filePath) throws IOException {
+        String content = Files.readString(Path.of(filePath));
+        jsonObject = new JSONObject(content);
+    }
+
+    public JSONObject getJson() {
+        return jsonObject;
+    }
+
+    public void saveJson(String filePath) throws IOException {
+        Files.writeString(Path.of(filePath), jsonObject.toString(4));   // indentFactor - za chetimostta na json file
+    }
+
+    // saveJson ??
+}
+
+
+
+// Какво прави indentFactor?
+//Числото 4 е indentFactor, което указва колко интервала да има за всеки вложен обект в JSON.
+//
+//Ако го зададеш на 0, ще получиш JSON без форматиране (един ред).
+//
+//Ако е 4, ще има четири интервала пред всяко вложено ниво.*/
