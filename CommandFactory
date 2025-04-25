@@ -1,20 +1,24 @@
-package bg.tu_varna.sit.а1.f23621627.project.core;
+package bg.tu_varna.sit.a1.f23621627.project.core;
 
-import bg.tu_varna.sit.а1.f23621627.project.commands.*;
-
-import java.util.*;
+import bg.tu_varna.sit.a1.f23621627.project.commands.Command;
+import bg.tu_varna.sit.a1.f23621627.project.commands.main.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CommandFactory {
-    private final Map<String, Command> commands;
+    private final Map<String, Command> commands = new HashMap<>();
 
-    public CommandFactory() {
-        commands = new HashMap<>();
+    public CommandFactory(JsonManager jsonManager) {
         commands.put("help", new HelpCommand());
-
-        //TODO: create the other commands
+        commands.put("open", new OpenCommand(jsonManager));
+        commands.put("close", new CloseCommand(jsonManager));
+        commands.put("save", new SaveCommand(jsonManager));
+        commands.put("saveas", new SaveAsCommand(jsonManager));
+        commands.put("exit", new ExitCommand(jsonManager));
+        // TODO: add validate, print, search, set, create, delete, move
     }
 
     public Command createCommand(String commandName) {
-        return commands.getOrDefault(commandName.toLowerCase(), null);
+        return commands.get(commandName.toLowerCase());
     }
 }
