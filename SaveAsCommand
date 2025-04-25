@@ -1,0 +1,23 @@
+package bg.tu_varna.sit.a1.f23621627.project.commands.main;
+
+import bg.tu_varna.sit.a1.f23621627.project.commands.Command;
+import bg.tu_varna.sit.a1.f23621627.project.core.JsonManager;
+
+public class SaveAsCommand implements Command {
+    private final JsonManager jsonManager;
+
+    public SaveAsCommand(JsonManager jsonManager) {
+        this.jsonManager = jsonManager;
+    }
+
+    @Override
+    public void execute(String arguments) {
+        if (arguments.isEmpty()) {
+            System.out.println("Please enter new path to save file to.");
+
+            return;
+        }
+        jsonManager.saveAs(arguments);
+    }
+}
+
