@@ -1,8 +1,28 @@
-package bg.tu_varna.sit.а1.f23621627.project.commands;
+package bg.tu_varna.sit.a1.f23621627.project.commands.main;
+
+import bg.tu_varna.sit.a1.f23621627.project.commands.Command;
+import bg.tu_varna.sit.a1.f23621627.project.core.JsonManager;
 
 public class ExitCommand implements Command {
+    private final JsonManager jsonManager;
+
+    public ExitCommand(JsonManager jsonManager) {
+        this.jsonManager = jsonManager;
+    }
+
     @Override
-    public void execute(String[] args) {
+    public void execute(String arguments) {
+        if (jsonManager.hasUnsavedChanges()) {
+            System.out.println("You have unsaved changes. Do you want to exit without saving? (yes/no)");
+            java.util.Scanner scanner = new java.util.Scanner(System.in);
+            String answer = scanner.nextLine();
+            if (!answer.equalsIgnoreCase("yes")) {
+                System.out.println("Exit is cancelled.");
+                return;
+            }
+        }
+        System.out.println("Exiting the programme...");
         System.exit(0);
     }
 }
+
