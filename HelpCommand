@@ -1,8 +1,10 @@
-package bg.tu_varna.sit.а1.f23621627.project.commands;
+package bg.tu_varna.sit.a1.f23621627.project.commands.main;
+
+import bg.tu_varna.sit.a1.f23621627.project.commands.Command;
 
 public class HelpCommand implements Command {
     @Override
-    public void execute(String[] args) {
+    public void execute(String arguments) {
         System.out.println(" validate - Checks if the JSON file is valid.");
         System.out.println(" print - Displays the contents of the JSON file.");
         System.out.println(" search <key> - Searches for values by a given key.");
