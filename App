@@ -18,18 +18,19 @@ public class App {
     public void run() {
         while (true) {
             System.out.print("> ");
-            String input = scanner.nextLine();
-            String[] tokens = input.trim().split("\\s+", 2);
-            String commandName = tokens[0];
-            String arguments = tokens.length > 1 ? tokens[1] : "";
+            String commandName = scanner.nextLine().toLowerCase();
 
             Command command = commandFactory.createCommand(commandName);
 
             if (command != null) {
-                command.execute(arguments);
+                command.execute("");
             } else {
-                System.out.println(" Invalid command. Enter 'help' to see available commands.");
+                System.out.println("Invalid command. Enter 'help' to see available commands.");
             }
         }
+    }
+
+    public Scanner getScanner() {
+        return scanner;
     }
 }
