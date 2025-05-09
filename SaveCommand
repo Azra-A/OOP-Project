@@ -12,10 +12,6 @@ public class SaveCommand implements Command {
 
     @Override
     public void execute(String arguments) {
-        if (arguments.isEmpty()) {
-            jsonManager.save();
-        } else {
-            jsonManager.saveAs(arguments);
-        }
+        jsonManager.save();
     }
 }
