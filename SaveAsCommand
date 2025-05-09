@@ -3,6 +3,8 @@ package bg.tu_varna.sit.a1.f23621627.project.commands.main;
 import bg.tu_varna.sit.a1.f23621627.project.commands.Command;
 import bg.tu_varna.sit.a1.f23621627.project.core.JsonManager;
 
+import java.util.Scanner;
+
 public class SaveAsCommand implements Command {
     private final JsonManager jsonManager;
 
@@ -12,12 +14,16 @@ public class SaveAsCommand implements Command {
 
     @Override
     public void execute(String arguments) {
-        if (arguments.isEmpty()) {
-            System.out.println("Please enter new path to save file to.");
+        Scanner scanner = new Scanner(System.in);
 
+        System.out.println("Please enter the new path to save the file:");
+        String path = scanner.nextLine().trim();
+
+        if (path.isEmpty()) {
+            System.out.println("Invalid path. Operation cancelled.");
             return;
         }
-        jsonManager.saveAs(arguments);
+
+        jsonManager.saveAs(path);
     }
 }
-
