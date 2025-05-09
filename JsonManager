@@ -1,9 +1,8 @@
 package bg.tu_varna.sit.a1.f23621627.project.core;
 
 import org.json.JSONObject;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+
+import java.io.*;
 
 public class JsonManager {
     private JSONObject jsonObject;
@@ -11,9 +10,15 @@ public class JsonManager {
     private boolean isModified;
 
     public void open(String path) {
-        try {
-            String content = new String(Files.readAllBytes(Paths.get(path)));
-            this.jsonObject = new JSONObject(content);
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            StringBuilder contentBuilder = new StringBuilder();
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                contentBuilder.append(line);
+            }
+
+            this.jsonObject = new JSONObject(contentBuilder.toString());
             this.filePath = path;
             this.isModified = false;
             System.out.println("File has been opened successfully.");
@@ -37,8 +42,8 @@ public class JsonManager {
 
     public void save() {
         if (jsonObject != null && filePath != null) {
-            try {
-                Files.write(Paths.get(filePath), jsonObject.toString(4).getBytes());
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+                writer.write(jsonObject.toString(4));
                 isModified = false;
                 System.out.println("The file has been saved successfully.");
             } catch (IOException e) {
@@ -51,8 +56,8 @@ public class JsonManager {
 
     public void saveAs(String path) {
         if (jsonObject != null) {
-            try {
-                Files.write(Paths.get(path), jsonObject.toString(4).getBytes());
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+                writer.write(jsonObject.toString(4));
                 filePath = path;
                 isModified = false;
                 System.out.println("The file has been saved as new successfully.");
@@ -75,6 +80,4 @@ public class JsonManager {
     public JSONObject getJsonObject() {
         return jsonObject;
     }
-
 }
-
