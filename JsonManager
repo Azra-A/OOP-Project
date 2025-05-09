@@ -16,11 +16,11 @@ public class JsonManager {
             this.jsonObject = new JSONObject(content);
             this.filePath = path;
             this.isModified = false;
-            System.out.println("Файлът е отворен успешно.");
+            System.out.println("File has been opened successfully.");
         } catch (IOException e) {
-            System.out.println("Грешка при отваряне на файла: " + e.getMessage());
+            System.out.println("Error while opening the file: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Невалиден JSON формат: " + e.getMessage());
+            System.out.println("Invalid JSON format: " + e.getMessage());
         }
     }
 
@@ -29,9 +29,9 @@ public class JsonManager {
             jsonObject = null;
             filePath = null;
             isModified = false;
-            System.out.println("Файлът е затворен.");
+            System.out.println("The file is closed.");
         } else {
-            System.out.println("Няма отворен файл.");
+            System.out.println("There is no open file.");
         }
     }
 
@@ -40,12 +40,12 @@ public class JsonManager {
             try {
                 Files.write(Paths.get(filePath), jsonObject.toString(4).getBytes());
                 isModified = false;
-                System.out.println("Файлът е записан успешно.");
+                System.out.println("The file has been saved successfully.");
             } catch (IOException e) {
-                System.out.println("Грешка при записване на файла: " + e.getMessage());
+                System.out.println("Error while saving the file: " + e.getMessage());
             }
         } else {
-            System.out.println("Няма отворен файл за запис.");
+            System.out.println("There is no open file to save.");
         }
     }
 
@@ -77,3 +77,4 @@ public class JsonManager {
     }
 
 }
+
