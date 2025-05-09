@@ -14,7 +14,7 @@ public class ExitCommand implements Command {
     public void execute(String arguments) {
         if (jsonManager.hasUnsavedChanges()) {
             System.out.println("You have unsaved changes. Do you want to exit without saving? (yes/no)");
-            java.util.Scanner scanner = new java.util.Scanner(System.in);
+            Scanner scanner = new Scanner(System.in);
             String answer = scanner.nextLine();
             if (!answer.equalsIgnoreCase("yes")) {
                 System.out.println("Exit is cancelled.");
