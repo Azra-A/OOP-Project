@@ -3,6 +3,8 @@ package bg.tu_varna.sit.a1.f23621627.project.commands.main;
 import bg.tu_varna.sit.a1.f23621627.project.commands.Command;
 import bg.tu_varna.sit.a1.f23621627.project.core.JsonManager;
 
+import java.util.Scanner;
+
 public class OpenCommand implements Command {
     private final JsonManager jsonManager;
 
@@ -12,10 +14,15 @@ public class OpenCommand implements Command {
 
     @Override
     public void execute(String arguments) {
-        if (arguments.isEmpty()) {
-            System.out.println("Please enter path to a file.");
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the path to the file to open: ");
+        String path = scanner.nextLine().trim();
+
+        if (path.isEmpty()) {
+            System.out.println("No path entered. Operation cancelled.");
             return;
         }
-        jsonManager.open(arguments);
+
+        jsonManager.open(path);
     }
 }
