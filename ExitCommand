@@ -3,6 +3,8 @@ package bg.tu_varna.sit.a1.f23621627.project.commands.main;
 import bg.tu_varna.sit.a1.f23621627.project.commands.Command;
 import bg.tu_varna.sit.a1.f23621627.project.core.JsonManager;
 
+import java.util.Scanner;
+
 public class ExitCommand implements Command {
     private final JsonManager jsonManager;
 
