@@ -1,0 +1,30 @@
+package bg.tu_varna.sit.a1.f23621627.project.commands;
+
+import bg.tu_varna.sit.a1.f23621627.project.core.JsonManager;
+import org.json.JSONObject;
+import org.json.JSONException;
+
+public class ValidateCommand implements Command {
+    private final JsonManager jsonManager;
+
+    public ValidateCommand(JsonManager jsonManager) {
+        this.jsonManager = jsonManager;
+    }
+
+    @Override
+    public void execute(String arguments) {
+        JSONObject obj = jsonManager.getJsonObject();
+
+        if (obj == null) {
+            System.out.println("No file is currently opened.");
+            return;
+        }
+
+        try {
+            new JSONObject(obj.toString());
+            System.out.println("This is a valid JSON file.");
+        } catch (JSONException e) {
+            System.out.println("This is an invalid JSON file: " + e.getMessage());
+        }
+    }
+}
