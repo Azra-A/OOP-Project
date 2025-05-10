@@ -1,0 +1,67 @@
+package bg.tu_varna.sit.a1.f23621627.project.commands;
+
+import bg.tu_varna.sit.a1.f23621627.project.core.JsonManager;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+public class PrintCommand implements Command {
+    private final JsonManager jsonManager;
+
+    public PrintCommand(JsonManager jsonManager) {
+        this.jsonManager = jsonManager;
+    }
+
+    @Override
+    public void execute(String arguments) {
+        JSONObject jsonObject = jsonManager.getJsonObject();
+
+        if (jsonObject == null) {
+            System.out.println("There is no file opened.");
+            return;
+        }
+
+        printObject(jsonObject, 0);
+    }
+
+    private void printObject(Object obj, int level) {
+        if (obj instanceof JSONObject) {
+            JSONObject json = (JSONObject) obj;
+
+            for (String key : json.keySet()) {
+                Object value = json.get(key);
+
+                printIndent(level);
+                System.out.print(key + ": ");
+
+                if (value instanceof JSONObject || value instanceof JSONArray) {
+                    System.out.println();
+                    printObject(value, level + 2);
+                } else {
+                    System.out.println(value);
+                }
+            }
+        } else if (obj instanceof JSONArray) {
+            JSONArray array = (JSONArray) obj;
+
+            for (int i = 0; i < array.length(); i++) {
+                Object item = array.get(i);
+
+                printIndent(level);
+                System.out.print("- ");
+
+                if (item instanceof JSONObject || item instanceof JSONArray) {
+                    System.out.println();
+                    printObject(item, level + 2);
+                } else {
+                    System.out.println(item);
+                }
+            }
+        }
+    }
+
+    private void printIndent(int level) {
+        for (int i = 0; i < level; i++) {
+            System.out.print(" ");
+        }
+    }
+}
