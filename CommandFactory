@@ -9,13 +9,18 @@ public class CommandFactory {
     private final Map<String, Command> commands = new HashMap<>();
 
     public CommandFactory(JsonManager jsonManager) {
-        commands.put("help", new HelpCommand());
+        commands.put("help", new HelpCommand(jsonManager));
         commands.put("open", new OpenCommand(jsonManager));
         commands.put("close", new CloseCommand(jsonManager));
         commands.put("save", new SaveCommand(jsonManager));
         commands.put("saveas", new SaveAsCommand(jsonManager));
         commands.put("exit", new ExitCommand(jsonManager));
-        // TODO: add validate, print, search, set, create, delete, move
+        
+        // TODO: add search, set, create, move
+        commands.put("delete", new DeleteCommand());
+        commands.put("print", new PrintCommand(jsonManager));
+        commands.put("validate", new ValidateCommand(jsonManager));
+
     }
 
     public Command createCommand(String commandName) {
