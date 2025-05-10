@@ -18,6 +18,11 @@ public class JsonManager {
                 contentBuilder.append(line);
             }
 
+            if (!path.endsWith(".json")) {
+                System.out.println("Only .json files are supported.");
+                return;
+            }
+
             this.jsonObject = new JSONObject(contentBuilder.toString());
             this.filePath = path;
             this.isModified = false;
