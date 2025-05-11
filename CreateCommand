@@ -1,0 +1,42 @@
+package bg.tu_varna.sit.a1.f23621627.project.commands;
+
+import bg.tu_varna.sit.a1.f23621627.project.core.JsonManager;
+import org.json.JSONObject;
+
+import java.util.Scanner;
+
+public class CreateCommand implements Command {
+    private final JsonManager jsonManager;
+
+    public CreateCommand(JsonManager jsonManager) {
+        this.jsonManager = jsonManager;
+    }
+
+    @Override
+    public void execute(String arguments) {
+        JSONObject json = jsonManager.getJsonObject();
+
+        if (json == null) {
+            System.out.println("No file is currently opened.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter key to create: ");
+        String key = scanner.nextLine().trim();
+
+        if (json.has(key)) {
+            System.out.println("Key already exists.");
+            return;
+        }
+
+        System.out.print("Enter value: ");
+        String value = scanner.nextLine().trim();
+
+        json.put(key, value);
+
+        jsonManager.markModified();
+        System.out.println("Key added successfully.");
+    }
+}
