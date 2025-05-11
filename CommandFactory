@@ -1,6 +1,6 @@
 package bg.tu_varna.sit.a1.f23621627.project.core;
 
-import bg.tu_varna.sit.a1.f23621627.project.commands.Command;
+import bg.tu_varna.sit.a1.f23621627.project.commands.*;
 import bg.tu_varna.sit.a1.f23621627.project.commands.main.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,13 +13,15 @@ public class CommandFactory {
         commands.put("open", new OpenCommand(jsonManager));
         commands.put("close", new CloseCommand(jsonManager));
         commands.put("save", new SaveCommand(jsonManager));
-        commands.put("saveas", new SaveAsCommand(jsonManager));
+        commands.put("save as", new SaveAsCommand(jsonManager));
         commands.put("exit", new ExitCommand(jsonManager));
-        
-        // TODO: add search, set, create, move
+
+        // TODO: add set, move
         commands.put("delete", new DeleteCommand());
         commands.put("print", new PrintCommand(jsonManager));
         commands.put("validate", new ValidateCommand(jsonManager));
+        commands.put("create", new CreateCommand(jsonManager));
+        commands.put("search", new SearchCommand(jsonManager));
 
     }
 
