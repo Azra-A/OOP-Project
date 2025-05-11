@@ -1,0 +1,64 @@
+package bg.tu_varna.sit.a1.f23621627.project.commands;
+
+import bg.tu_varna.sit.a1.f23621627.project.core.JsonManager;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.*;
+
+public class SearchCommand implements Command {
+    private final JsonManager jsonManager;
+
+    public SearchCommand(JsonManager jsonManager) {
+        this.jsonManager = jsonManager;
+    }
+
+    @Override
+    public void execute(String arguments) {
+        JSONObject jsonObject = jsonManager.getJsonObject();
+
+        if (jsonObject == null) {
+            System.out.println("No file is currently opened.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the key to search for: ");
+        String key = scanner.nextLine().trim();
+
+        if (key.isEmpty()) {
+            System.out.println("No key entered. Operation cancelled.");
+            return;
+        }
+
+        List<Object> results = new ArrayList<>();
+        searchKey(jsonObject, key, results);
+
+        if (results.isEmpty()) {
+            System.out.println("No values found for key \"" + key + "\".");
+        } else {
+            System.out.println("Values found for key \"" + key + "\":");
+            for (Object value : results) {
+                System.out.println("- " + value);
+            }
+        }
+    }
+
+    private void searchKey(Object obj, String key, List<Object> results) {
+        if (obj instanceof JSONObject) {
+            JSONObject json = (JSONObject) obj;
+            for (String k : json.keySet()) {
+                Object value = json.get(k);
+                if (k.equals(key)) {
+                    results.add(value);
+                }
+                searchKey(value, key, results);
+            }
+        } else if (obj instanceof JSONArray) {
+            JSONArray array = (JSONArray) obj;
+            for (int i = 0; i < array.length(); i++) {
+                searchKey(array.get(i), key, results);
+            }
+        }
+    }
+}
