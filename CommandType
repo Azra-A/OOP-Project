@@ -1,0 +1,36 @@
+package bg.tu_varna.sit.a1.f23621627.project.core;
+
+public enum CommandType {
+    HELP("help"),
+    OPEN("open"),
+    CLOSE("close"),
+    SAVE("save"),
+    SAVE_AS("saveas"),
+    EXIT("exit"),
+    DELETE("delete"),
+    PRINT("print"),
+    VALIDATE("validate"),
+    CREATE("create"),
+    SEARCH("search"),
+    MOVE("move"),
+    SET("set");
+
+    private final String inputText;
+
+    CommandType(String inputText) {
+        this.inputText = inputText;
+    }
+
+    public String getInputText() {
+        return inputText;
+    }
+
+    public static CommandType fromString(String input) {
+        for (CommandType type : values()) {
+            if (type.inputText.equalsIgnoreCase(input)) {
+                return type;
+            }
+        }
+        return null;
+    }
+}
