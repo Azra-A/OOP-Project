@@ -1,0 +1,58 @@
+
+package bg.tu_varna.sit.a1.f23621627.project.commands;
+
+import bg.tu_varna.sit.a1.f23621627.project.core.JsonManager;
+import org.json.*;
+
+import java.util.Scanner;
+
+public class SetCommand implements Command {
+    private final JsonManager jsonManager;
+
+    public SetCommand(JsonManager jsonManager) {
+        this.jsonManager = jsonManager;
+    }
+
+    @Override
+    public void execute(String arguments) {
+        if (jsonManager.getJsonObject() == null) {
+            System.out.println("No file is currently open.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter path to set (e.g. user.age): ");
+        String path = scanner.nextLine().trim();
+
+        System.out.print("Enter value to set: ");
+        String value = scanner.nextLine().trim();
+
+
+        try {
+            String[] keys = path.split("\\.");
+            JSONObject current = jsonManager.getJsonObject();
+
+            for (int i = 0; i < keys.length - 1; i++) {
+                String key = keys[i];
+                if (!current.has(key)) {
+                    System.out.println("Invalid path: '" + key + "' is missing.");
+                    return;
+                }
+                current = current.getJSONObject(key);
+            }
+
+            String lastKey = keys[keys.length - 1];
+            if (!current.has(lastKey)) {
+                System.out.println("The element at the given path does not exist.");
+                return;
+            }
+
+            current.put(lastKey, value);
+            jsonManager.markModified();
+            System.out.println("Value successfully set.");
+        } catch (JSONException e) {
+            System.out.println("Invalid JSON value: " + e.getMessage());
+        }
+    }
+}
