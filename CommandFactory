@@ -2,30 +2,32 @@ package bg.tu_varna.sit.a1.f23621627.project.core;
 
 import bg.tu_varna.sit.a1.f23621627.project.commands.*;
 import bg.tu_varna.sit.a1.f23621627.project.commands.main.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class CommandFactory {
-    private final Map<String, Command> commands = new HashMap<>();
+    private final Map<CommandType, Command> commands = new HashMap<>();
 
     public CommandFactory(JsonManager jsonManager) {
-        commands.put("help", new HelpCommand(jsonManager));
-        commands.put("open", new OpenCommand(jsonManager));
-        commands.put("close", new CloseCommand(jsonManager));
-        commands.put("save", new SaveCommand(jsonManager));
-        commands.put("save as", new SaveAsCommand(jsonManager));
-        commands.put("exit", new ExitCommand(jsonManager));
+        commands.put(CommandType.HELP, new HelpCommand(jsonManager));
+        commands.put(CommandType.OPEN, new OpenCommand(jsonManager));
+        commands.put(CommandType.CLOSE, new CloseCommand(jsonManager));
+        commands.put(CommandType.SAVE, new SaveCommand(jsonManager));
+        commands.put(CommandType.SAVE_AS, new SaveAsCommand(jsonManager));
+        commands.put(CommandType.EXIT, new ExitCommand(jsonManager));
 
-        // TODO: add set, move
-        commands.put("delete", new DeleteCommand());
-        commands.put("print", new PrintCommand(jsonManager));
-        commands.put("validate", new ValidateCommand(jsonManager));
-        commands.put("create", new CreateCommand(jsonManager));
-        commands.put("search", new SearchCommand(jsonManager));
-
+        commands.put(CommandType.DELETE, new DeleteCommand());
+        commands.put(CommandType.PRINT, new PrintCommand(jsonManager));
+        commands.put(CommandType.VALIDATE, new ValidateCommand(jsonManager));
+        commands.put(CommandType.CREATE, new CreateCommand(jsonManager));
+        commands.put(CommandType.SEARCH, new SearchCommand(jsonManager));
+        commands.put(CommandType.MOVE, new MoveCommand(jsonManager));
+        commands.put(CommandType.SET, new SetCommand(jsonManager));
     }
 
     public Command createCommand(String commandName) {
-        return commands.get(commandName.toLowerCase());
+        CommandType commandType = CommandType.fromString(commandName);
+        return commands.get(commandType);
     }
 }
