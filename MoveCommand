@@ -1,0 +1,72 @@
+package bg.tu_varna.sit.a1.f23621627.project.commands;
+
+import bg.tu_varna.sit.a1.f23621627.project.core.JsonManager;
+import org.json.JSONObject;
+
+import java.util.Scanner;
+
+public class MoveCommand implements Command {
+    private final JsonManager jsonManager;
+
+    public MoveCommand(JsonManager jsonManager) {
+        this.jsonManager = jsonManager;
+    }
+
+    @Override
+    public void execute(String arguments) {
+        JSONObject root = jsonManager.getJsonObject();
+        if (root == null) {
+            System.out.println("No file is currently open.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter path to move FROM (e.g. user.age): ");
+        String fromPath = scanner.nextLine().trim();
+
+        System.out.print("Enter path to move TO (e.g. user.info.age): ");
+        String toPath = scanner.nextLine().trim();
+
+        try {
+            String[] fromKeys = fromPath.split("\\.");
+            JSONObject fromCurrent = root;
+            for (int i = 0; i < fromKeys.length - 1; i++) {
+                if (!fromCurrent.has(fromKeys[i])) {
+                    System.out.println("Invalid from-path.");
+                    return;
+                }
+                fromCurrent = fromCurrent.getJSONObject(fromKeys[i]);
+            }
+
+            String fromKey = fromKeys[fromKeys.length - 1];
+            if (!fromCurrent.has(fromKey)) {
+                System.out.println("Element to move not found.");
+                return;
+            }
+
+            Object valueToMove = fromCurrent.get(fromKey);
+            fromCurrent.remove(fromKey);
+
+            String[] toKeys = toPath.split("\\.");
+            JSONObject toCurrent = root;
+            for (int i = 0; i < toKeys.length - 1; i++) {
+                if (!toCurrent.has(toKeys[i])) {
+                    JSONObject newObj = new JSONObject();
+                    toCurrent.put(toKeys[i], newObj);
+                    toCurrent = newObj;
+                } else {
+                    toCurrent = toCurrent.getJSONObject(toKeys[i]);
+                }
+            }
+
+            String toKey = toKeys[toKeys.length - 1];
+            toCurrent.put(toKey, valueToMove);
+
+            jsonManager.markModified();
+            System.out.println("Value successfully moved.");
+        } catch (Exception e) {
+            System.out.println("Error during move: " + e.getMessage());
+        }
+    }
+}
