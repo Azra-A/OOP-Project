@@ -1,16 +1,26 @@
 package bg.tu_varna.sit.a1.f23621627.project.commands.main;
 
 import bg.tu_varna.sit.a1.f23621627.project.commands.Command;
+import bg.tu_varna.sit.a1.f23621627.project.core.JsonManager;
 
 public class HelpCommand implements Command {
+    private final JsonManager jsonManager;
+
+    public HelpCommand(JsonManager jsonManager) {
+        this.jsonManager = jsonManager;
+    }
+
     @Override
     public void execute(String arguments) {
+        System.out.println(" open <path> - Opens file. If there's no file with given path, it creates a new file.");
+        System.out.println(" close - Closes current file.");
         System.out.println(" validate - Checks if the JSON file is valid.");
         System.out.println(" print - Displays the contents of the JSON file.");
         System.out.println(" search <key> - Searches for values by a given key.");
         System.out.println(" set <path> <value> - Sets a new JSON element value.");
         System.out.println(" create <path> <value> - Creates a new JSON element.");
-        System.out.println(" delete <path> - Deletes a JSON element.");
+        System.out.println(" delete element <path> - Deletes a JSON element.");
+        System.out.println(" delete file <path> - Deletes a JSON file.");
         System.out.println(" move <from> <to> - Moves JSON element.");
         System.out.println(" save [path] - Saves the JSON file.");
         System.out.println(" save as <file> [path] - Saves the JSON to a new file.");
