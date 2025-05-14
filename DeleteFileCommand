@@ -1,10 +1,17 @@
 package bg.tu_varna.sit.a1.f23621627.project.commands;
 
+import bg.tu_varna.sit.a1.f23621627.project.core.JsonManager;
+
 import java.io.File;
 import java.util.Scanner;
 
 public class DeleteFileCommand implements Command {
+    private final JsonManager jsonManager;
 
+    public DeleteFileCommand(JsonManager jsonManager) {
+        this.jsonManager = jsonManager;
+    }
+    
     @Override
     public void execute(String arguments) {
         Scanner scanner = new Scanner(System.in);
