@@ -6,10 +6,10 @@ import bg.tu_varna.sit.a1.f23621627.project.commands.main.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CommandFactory {
+public class CommandManager {
     private final Map<CommandType, Command> commands = new HashMap<>();
 
-    public CommandFactory(JsonManager jsonManager) {
+    public CommandManager(JsonManager jsonManager) {
         commands.put(CommandType.HELP, new HelpCommand(jsonManager));
         commands.put(CommandType.OPEN, new OpenCommand(jsonManager));
         commands.put(CommandType.CLOSE, new CloseCommand(jsonManager));
@@ -17,7 +17,8 @@ public class CommandFactory {
         commands.put(CommandType.SAVE_AS, new SaveAsCommand(jsonManager));
         commands.put(CommandType.EXIT, new ExitCommand(jsonManager));
 
-        commands.put(CommandType.DELETE, new DeleteCommand());
+        commands.put(CommandType.DELETE_FILE, new DeleteFileCommand());
+        commands.put(CommandType.DELETE_ELEMENT, new DeleteElementCommand(jsonManager));
         commands.put(CommandType.PRINT, new PrintCommand(jsonManager));
         commands.put(CommandType.VALIDATE, new ValidateCommand(jsonManager));
         commands.put(CommandType.CREATE, new CreateCommand(jsonManager));
