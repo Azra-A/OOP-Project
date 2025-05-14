@@ -1,0 +1,56 @@
+package bg.tu_varna.sit.a1.f23621627.project.commands;
+
+import bg.tu_varna.sit.a1.f23621627.project.core.JsonManager;
+import org.json.JSONObject;
+
+import java.util.Scanner;
+
+public class DeleteElementCommand implements Command {
+    private final JsonManager jsonManager;
+
+    public DeleteElementCommand(JsonManager jsonManager) {
+        this.jsonManager = jsonManager;
+    }
+
+    @Override
+    public void execute(String arguments) {
+        if (jsonManager.getJsonObject() == null) {
+            System.out.println("No file is currently open.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter path to delete (e.g. user.address.city): ");
+        String path = scanner.nextLine().trim();
+
+        String[] keys = path.split("\\.");
+        JSONObject current = jsonManager.getJsonObject();
+
+        for (int i = 0; i < keys.length - 1; i++) {
+            String key = keys[i];
+
+            if (!current.has(key)) {
+                System.out.println("Invalid path: '" + key + "' not found.");
+                return;
+            }
+
+            try {
+                current = current.getJSONObject(key);
+            } catch (Exception e) {
+                System.out.println("Invalid path: '" + key + "' is not a JSON object.");
+                return;
+            }
+        }
+
+        String lastKey = keys[keys.length - 1];
+
+        if (!current.has(lastKey)) {
+            System.out.println("Element at path '" + path + "' does not exist.");
+            return;
+        }
+
+        current.remove(lastKey);
+        jsonManager.markModified();
+        System.out.println("Element deleted successfully.");
+    }
+}
