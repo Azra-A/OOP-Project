@@ -2,10 +2,18 @@ package bg.tu_varna.sit.a1.f23621627.core;
 
 import java.io.*;
 
+/**
+ * Handles opening, closing, reading, and writing of files.
+ */
 public class FileManager {
     private String currentFilePath;
     private String fileContent;
 
+    /**
+     * Opens a file and loads its content. If the file doesn't exist, it is created.
+     *
+     * @param filePath the path of the file to open
+     */
     public void open(String filePath) {
         if (filePath == null) {
             System.out.println("No file path provided.");
@@ -37,6 +45,9 @@ public class FileManager {
         }
     }
 
+    /**
+     * Closes the currently opened file.
+     */
     public void close() {
         if (currentFilePath == null) {
             System.out.println("No file is currently open.");
@@ -48,6 +59,11 @@ public class FileManager {
         System.out.println("Successfully closed file.");
     }
 
+    /**
+     * Saves the current file. Can also save to a different path if specified.
+     *
+     * @param optionalPath the path to save the file to, or null to save to the current path
+     */
     public void save(String optionalPath) {
         if (currentFilePath == null) {
             System.out.println("No file is currently open.");
@@ -71,6 +87,11 @@ public class FileManager {
         }
     }
 
+    /**
+     * Saves the file to a new location.
+     *
+     * @param filePath the path to save the file to
+     */
     public void saveAs(String filePath) {
         if (filePath == null) {
             System.out.println("No path provided.");
@@ -87,11 +108,15 @@ public class FileManager {
         return currentFilePath;
     }
 
-
     public void setContent(String content) {
         this.fileContent = content;
     }
 
+    /**
+     * Checks if a file is open.
+     *
+     * @return true if a file is open, false otherwise
+     */
     public boolean isFileOpen() {
         return currentFilePath != null;
     }
