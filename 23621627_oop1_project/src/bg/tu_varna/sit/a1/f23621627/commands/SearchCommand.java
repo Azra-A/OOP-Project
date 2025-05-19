@@ -5,6 +5,10 @@ import bg.tu_varna.sit.a1.f23621627.core.FileManager;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Command that searches for all values associated with a specified key in the currently opened file.
+ * Prints all found values or an appropriate message if no values are found.
+ */
 public class SearchCommand implements Command {
     private final FileManager fileManager;
 
@@ -12,6 +16,13 @@ public class SearchCommand implements Command {
         this.fileManager = fileManager;
     }
 
+    /**
+     * Executes the search command.
+     * Searches for the provided key in the JSON content of the opened file and prints all values found.
+     * Prints error messages if no file is open, no key is provided, or the file is empty.
+     *
+     * @param arguments the key to search for in the file content
+     */
     @Override
     public void execute(String arguments) {
         if (!fileManager.isFileOpen()) {
@@ -42,6 +53,13 @@ public class SearchCommand implements Command {
         }
     }
 
+    /**
+     * Extracts all values for a specified key from a JSON string.
+     *
+     * @param json the JSON content as a string
+     * @param key the key to search for
+     * @return a list of all values associated with the key
+     */
     private List<String> extractValuesForKey(String json, String key) {
         List<String> results = new ArrayList<>();
         String searchKey = "\"" + key + "\"";
@@ -70,6 +88,14 @@ public class SearchCommand implements Command {
         return results;
     }
 
+    /**
+     * Extracts a single JSON value starting at a given index.
+     * Supports strings, objects, arrays, and primitive values.
+     *
+     * @param json the JSON content
+     * @param start the start index of the value
+     * @return the extracted value as a string, or null if extraction fails
+     */
     private String extractValue(String json, int start) {
         char first = json.charAt(start);
         int end = start;
