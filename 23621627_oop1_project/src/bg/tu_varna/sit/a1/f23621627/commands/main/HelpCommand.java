@@ -2,7 +2,16 @@ package bg.tu_varna.sit.a1.f23621627.commands.main;
 
 import bg.tu_varna.sit.a1.f23621627.commands.Command;
 
+/**
+ * Displays a list of available commands and their descriptions.
+ */
 public class HelpCommand implements Command {
+
+    /**
+     * Prints help information about all supported commands.
+     *
+     * @param arguments optional arguments (ignored in this command)
+     */
     @Override
     public void execute(String arguments) {
         System.out.println(" open <path> - Opens file. If there's no file with given path, it creates a new file.");
