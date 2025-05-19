@@ -2,6 +2,9 @@ package bg.tu_varna.sit.a1.f23621627.commands;
 
 import bg.tu_varna.sit.a1.f23621627.core.FileManager;
 
+/**
+ * Command that sets or updates the value of a specified key in the currently opened file.
+ */
 public class SetCommand implements Command {
     private final FileManager fileManager;
 
@@ -9,6 +12,13 @@ public class SetCommand implements Command {
         this.fileManager = fileManager;
     }
 
+    /**
+     * Executes the set command.
+     * Updates the value at the specified path with the new string provided.
+     * Prints error messages if no file is open, arguments are missing, or the key is not found.
+     *
+     * @param arguments the arguments specifying the path and the new value (format: "path string")
+     */
     @Override
     public void execute(String arguments) {
         if (!fileManager.isFileOpen()) {
@@ -46,6 +56,14 @@ public class SetCommand implements Command {
         System.out.println("Value updated successfully.");
     }
 
+    /**
+     * Replaces the value associated with the given key in the JSON content with a new value.
+     *
+     * @param content the JSON content as a string
+     * @param key the key whose value should be replaced
+     * @param newValue the new value to set (must include quotes if it's a string)
+     * @return the updated JSON content or null if the key is not found
+     */
     private String replaceValueAfterKey(String content, String key, String newValue) {
         String searchKey = "\"" + key + "\"";
         int keyPos = content.indexOf(searchKey);
@@ -61,7 +79,7 @@ public class SetCommand implements Command {
             valStart++;
         }
 
-        int valEnd = valStart; // to be visible for "after"
+        int valEnd = valStart;  // to be visible for "after"
         boolean insideString = false;
         for (; valEnd < content.length(); valEnd++) {
             char c = content.charAt(valEnd);
