@@ -2,6 +2,10 @@ package bg.tu_varna.sit.a1.f23621627.commands;
 
 import bg.tu_varna.sit.a1.f23621627.core.FileManager;
 
+/**
+ * Command that moves a JSON element from one path to another
+ * within the currently opened file's content.
+ */
 public class MoveCommand implements Command {
     private final FileManager fileManager;
 
@@ -9,6 +13,15 @@ public class MoveCommand implements Command {
         this.fileManager = fileManager;
     }
 
+    /**
+     * Executes the move command.
+     * Expects two arguments: source path and destination path.
+     * Moves the element from the source to the destination within the JSON.
+     * Prints error messages if no file is open, arguments are invalid,
+     * or if paths cannot be found or processed.
+     *
+     * @param arguments a string containing the source and destination paths separated by space
+     */
     @Override
     public void execute(String arguments) {
         if (!fileManager.isFileOpen()) {
@@ -61,23 +74,41 @@ public class MoveCommand implements Command {
             value = value.substring(1, value.length() - 1);
         }
 
+        // Create the element at the destination path with the extracted value
         new CreateCommand(fileManager).execute(toPath + " " + value);
 
+        // Delete the element from the original location
         new DeleteCommand(fileManager).execute(fromPath);
 
         System.out.println("Element moved successfully.");
     }
 
+    /**
+     * Finds the starting index of the nested key path in the JSON content.
+     *
+     * @param content the JSON content as a string
+     * @param keys    the array of keys representing the nested path
+     * @return the index of the first key occurrence or -1 if not found
+     */
     private int findKeyIndex(String content, String[] keys) {
         int index = 0;
         for (String key : keys) {
             String quoted = "\"" + key + "\"";
             index = content.indexOf(quoted, index);
-            if (index == -1) return -1;
+            if (index == -1)
+                return -1;
         }
         return index;
     }
 
+    /**
+     * Finds the end index of the value for the key starting at keyStart.
+     * Accounts for quoted strings and nested structures.
+     *
+     * @param content  the JSON content as a string
+     * @param keyStart the index where the key starts
+     * @return the index just after the value or -1 if not found
+     */
     private int findValueEnd(String content, int keyStart) {
         int colonIndex = content.indexOf(":", keyStart);
         if (colonIndex == -1) return -1;
