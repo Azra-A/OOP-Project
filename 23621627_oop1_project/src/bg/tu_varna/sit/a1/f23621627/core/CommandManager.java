@@ -6,9 +6,18 @@ import bg.tu_varna.sit.a1.f23621627.commands.main.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Manages and executes user commands.
+ */
 public class CommandManager {
+
     private final Map<CommandType, Command> commands = new HashMap<>();
 
+    /**
+     * Creates a CommandManager and initializes all supported commands.
+     *
+     * @param fileManager used by commands that work with files
+     */
     public CommandManager(FileManager fileManager) {
         commands.put(CommandType.OPEN, new OpenCommand(fileManager));
         commands.put(CommandType.CLOSE, new CloseCommand(fileManager));
@@ -26,6 +35,11 @@ public class CommandManager {
         commands.put(CommandType.MOVE, new MoveCommand(fileManager));
     }
 
+    /**
+     * Executes a command based on the input string.
+     *
+     * @param input the full user input (e.g. "open file.json")
+     */
     public void executeCommand(String input) {
         if (input == null || input.isBlank()) {
             System.out.println("Empty command.");
