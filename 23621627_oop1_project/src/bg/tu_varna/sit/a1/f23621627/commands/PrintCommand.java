@@ -2,6 +2,10 @@ package bg.tu_varna.sit.a1.f23621627.commands;
 
 import bg.tu_varna.sit.a1.f23621627.core.FileManager;
 
+/**
+ * Command that prints the content of the currently opened file.
+ * The output is formatted JSON for better readability.
+ */
 public class PrintCommand implements Command {
     private final FileManager fileManager;
 
@@ -9,6 +13,14 @@ public class PrintCommand implements Command {
         this.fileManager = fileManager;
     }
 
+    /**
+     * Executes the print command.
+     * Prints the formatted JSON content of the open file.
+     * If no file is open or the file is empty, prints an appropriate message.
+     * Handles exceptions during JSON formatting gracefully.
+     *
+     * @param arguments command arguments (ignored in this command)
+     */
     @Override
     public void execute(String arguments) {
         if (!fileManager.isFileOpen()) {
@@ -30,6 +42,14 @@ public class PrintCommand implements Command {
         }
     }
 
+    /**
+     * Formats a JSON string to be more readable with proper indentation and line breaks.
+     * Takes care to preserve string literals and avoid breaking inside quotes.
+     * Removes extra empty lines from the output.
+     *
+     * @param json the raw JSON string to format
+     * @return a pretty-printed JSON string
+     */
     private String formatJson(String json) {
         StringBuilder result = new StringBuilder();
         int indent = 0;
@@ -86,7 +106,7 @@ public class PrintCommand implements Command {
                         lastCharWasNewline = false;
                     }
                     break;
-
+                // skip symbols for new line and cursor
                 case '\n':
                 case '\r':
                     break;
@@ -119,5 +139,4 @@ public class PrintCommand implements Command {
 
         return cleaned.toString().trim();
     }
-
 }
