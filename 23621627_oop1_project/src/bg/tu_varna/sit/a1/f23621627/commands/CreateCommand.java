@@ -2,6 +2,10 @@ package bg.tu_varna.sit.a1.f23621627.commands;
 
 import bg.tu_varna.sit.a1.f23621627.core.FileManager;
 
+/**
+ * A command that creates a new JSON element within the content of an opened file.
+ * It uses a dot-separated path and a value to add a new key to the JSON structure.
+ */
 public class CreateCommand implements Command {
     private final FileManager fileManager;
 
@@ -9,6 +13,14 @@ public class CreateCommand implements Command {
         this.fileManager = fileManager;
     }
 
+    /**
+     * Executes the create command.
+     * Expects arguments in the format "path value", where path is a dot-separated JSON key path
+     * (e.g., "parent.child.key") and value is the value to assign.
+     * If no file is open or arguments are invalid, prints an appropriate message.
+     *
+     * @param arguments the command arguments containing the path and value
+     */
     @Override
     public void execute(String arguments) {
         if (!fileManager.isFileOpen()) {
@@ -34,8 +46,6 @@ public class CreateCommand implements Command {
         String lastKey = keys[keys.length - 1];
         String content = fileManager.getContent();
 
-
-
         if (content.isEmpty() || content.equals("{}")) {
             StringBuilder newContent = new StringBuilder();
             int indentLevel = keys.length;
@@ -59,8 +69,6 @@ public class CreateCommand implements Command {
             return;
         }
 
-
-
         if (content.contains(lastKey + ":")) {
             System.out.println("Error: Key already exists: " + lastKey);
             return;
@@ -83,6 +91,13 @@ public class CreateCommand implements Command {
         System.out.println("Key added successfully.");
     }
 
+    /**
+     * Finds the index position in the JSON content string where the new key-value pair should be inserted.
+     *
+     * @param content the current JSON content string
+     * @param keys    the path keys as an array representing nested JSON keys
+     * @return the index in content to insert the new element, or -1 if the path could not be found
+     */
     private int findInsertIndex(String content, String[] keys) {
         int index = 0;
 
@@ -95,7 +110,6 @@ public class CreateCommand implements Command {
             if (braceStart == -1) return -1;
 
             index = braceStart + 1;
-
         }
 
         int insertPos = index;
@@ -117,6 +131,4 @@ public class CreateCommand implements Command {
 
         return insertPos;
     }
-
-
 }
