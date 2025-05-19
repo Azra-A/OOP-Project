@@ -2,6 +2,10 @@ package bg.tu_varna.sit.a1.f23621627.commands;
 
 import bg.tu_varna.sit.a1.f23621627.core.FileManager;
 
+/**
+ * Command that deletes a JSON element identified by a dot-separated path
+ * from the content of the currently opened file.
+ */
 public class DeleteCommand implements Command {
     private final FileManager fileManager;
 
@@ -9,6 +13,13 @@ public class DeleteCommand implements Command {
         this.fileManager = fileManager;
     }
 
+    /**
+     * Executes the delete command.
+     * The argument should be a dot-separated path to the key to delete (e.g., "parent.child.key").
+     * If no file is open or the path is invalid, prints an error message.
+     *
+     * @param arguments the path to the JSON element to delete
+     */
     @Override
     public void execute(String arguments) {
         if (!fileManager.isFileOpen()) {
@@ -36,6 +47,7 @@ public class DeleteCommand implements Command {
             return;
         }
 
+        // Skip trailing whitespace and comma if present
         while (endIndex < content.length() && Character.isWhitespace(content.charAt(endIndex))) {
             endIndex++;
         }
@@ -47,12 +59,20 @@ public class DeleteCommand implements Command {
         updated.delete(startIndex, endIndex);
         fileManager.setContent(updated.toString());
 
+        // Clean up trailing commas before closing braces
         String cleaned = updated.toString().replaceAll(",\\s*(\\}|\\])", "$1");
         fileManager.setContent(cleaned);
 
         System.out.println("Key deleted successfully.");
     }
 
+    /**
+     * Finds the start index of the specified key path in the JSON content.
+     *
+     * @param content the JSON content as a string
+     * @param keys    array of keys representing the nested path
+     * @return the index of the key in content, or -1 if not found
+     */
     private int findKeyIndex(String content, String[] keys) {
         int index = 0;
         for (int i = 0; i < keys.length; i++) {
@@ -64,7 +84,14 @@ public class DeleteCommand implements Command {
         return index;
     }
 
-
+    /**
+     * Finds the end index of the value corresponding to a key starting at keyStart.
+     * It accounts for quoted strings and nested structures.
+     *
+     * @param content  the JSON content as a string
+     * @param keyStart the index where the key starts
+     * @return the index just after the value, or -1 if not found
+     */
     private int findValueEnd(String content, int keyStart) {
         int colonIndex = content.indexOf(":", keyStart);
         if (colonIndex == -1)
