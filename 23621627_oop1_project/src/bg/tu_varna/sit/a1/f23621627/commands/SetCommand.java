@@ -40,6 +40,11 @@ public class SetCommand implements Command {
         String path = parts[0];
         String newValue = parts[1];
 
+        if (!newValue.startsWith("\"") || !newValue.endsWith("\"")) {
+            newValue = "\"" + newValue + "\"";
+        }
+
+
         String[] keys = path.split("\\.");
         String lastKey = keys[keys.length - 1];
 
