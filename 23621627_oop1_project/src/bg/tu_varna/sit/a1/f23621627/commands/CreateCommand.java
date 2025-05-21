@@ -63,7 +63,7 @@ public class CreateCommand implements Command {
                 newContent.append("\n");
             }
 
-            String finalContent = "{\n" + newContent.toString() + "}";
+            String finalContent = "{\n" + newContent + "}";
             fileManager.setContent(finalContent);
             System.out.println("Key added successfully.");
             return;
