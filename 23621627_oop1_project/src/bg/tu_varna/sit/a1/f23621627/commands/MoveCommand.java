@@ -74,10 +74,10 @@ public class MoveCommand implements Command {
             value = value.substring(1, value.length() - 1);
         }
 
-        // Create the element at the destination path with the extracted value
+        // create the element at the path with the extracted value
         new CreateCommand(fileManager).execute(toPath + " " + value);
 
-        // Delete the element from the original location
+        // delete the element from the original location
         new DeleteCommand(fileManager).execute(fromPath);
 
         System.out.println("Element moved successfully.");
@@ -93,7 +93,7 @@ public class MoveCommand implements Command {
     private int findKeyIndex(String content, String[] keys) {
         int index = 0;
         for (String key : keys) {
-            String quoted = "\"" + key + "\"";
+            String quoted = "\"" + key + "\"";   // in json key is " "
             index = content.indexOf(quoted, index);
             if (index == -1)
                 return -1;
@@ -119,10 +119,12 @@ public class MoveCommand implements Command {
         while (i < content.length()) {
             char c = content.charAt(i);
 
+            // symbol is " and is unescaped with \\
             if (c == '"' && (i == 0 || content.charAt(i - 1) != '\\')) {
                 inQuotes = !inQuotes;
             }
 
+            // value is found
             if (!inQuotes && (c == ',' || c == '\n' || c == '}')) {
                 return i;
             }
