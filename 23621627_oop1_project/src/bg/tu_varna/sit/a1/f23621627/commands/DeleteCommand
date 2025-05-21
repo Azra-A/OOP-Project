@@ -47,7 +47,7 @@ public class DeleteCommand implements Command {
             return;
         }
 
-        // Skip trailing whitespace and comma if present
+        // skip trailing whitespace and comma if present
         while (endIndex < content.length() && Character.isWhitespace(content.charAt(endIndex))) {
             endIndex++;
         }
@@ -103,10 +103,12 @@ public class DeleteCommand implements Command {
         while (i < content.length()) {
             char c = content.charAt(i);
 
+            // symbol is " and is unescaped with \\
             if (c == '"' && (i == 0 || content.charAt(i - 1) != '\\')) {
                 inQuotes = !inQuotes;
             }
 
+            // value is found
             if (!inQuotes && (c == ',' || c == '\n' || c == '}')) {
                 return i;
             }
