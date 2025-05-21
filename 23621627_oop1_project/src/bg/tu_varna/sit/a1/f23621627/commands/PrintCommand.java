@@ -112,6 +112,7 @@ public class PrintCommand implements Command {
                     break;
 
                 default:
+                    // no empty spaces at the start of the new line
                     if (lastCharWasNewline && c == ' ') {
                         break;
                     }
@@ -125,6 +126,7 @@ public class PrintCommand implements Command {
         StringBuilder cleaned = new StringBuilder();
         boolean lastLineEmpty = false;
 
+        // no multiple empty lines
         for (String line : lines) {
             if (line.trim().isEmpty()) {
                 if (!lastLineEmpty) {
