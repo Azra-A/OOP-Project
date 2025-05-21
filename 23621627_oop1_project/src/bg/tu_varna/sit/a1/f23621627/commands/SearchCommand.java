@@ -65,6 +65,7 @@ public class SearchCommand implements Command {
         String searchKey = "\"" + key + "\"";
         int index = 0;
 
+        // searches for "key" in file
         while ((index = json.indexOf(searchKey, index)) != -1) {
             int colon = json.indexOf(':', index + searchKey.length());
             if (colon == -1)
@@ -104,7 +105,8 @@ public class SearchCommand implements Command {
             case '"':
                 end = start + 1;
                 while (end < json.length()) {
-                    if (json.charAt(end) == '"' && json.charAt(end - 1) != '\\') break;
+                    if (json.charAt(end) == '"' && json.charAt(end - 1) != '\\')
+                        break;
                     end++;
                 }
                 return json.substring(start + 1, end);
@@ -128,6 +130,7 @@ public class SearchCommand implements Command {
                 }
                 return json.substring(start, end);
             default:
+                // end - not ,}]
                 while (end < json.length() && ",}]".indexOf(json.charAt(end)) == -1)
                     end++;
 
