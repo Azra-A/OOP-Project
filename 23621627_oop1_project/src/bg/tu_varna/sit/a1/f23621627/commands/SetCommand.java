@@ -3,21 +3,20 @@ package bg.tu_varna.sit.a1.f23621627.commands;
 import bg.tu_varna.sit.a1.f23621627.core.FileManager;
 
 /**
- * Command that sets or updates the value of a specified key in the currently opened file.
+ * Command implementation that validates the syntax of a JSON file
+ * currently opened in the FileManager.
  */
-public class SetCommand implements Command {
+public class ValidateCommand implements Command {
     private final FileManager fileManager;
 
-    public SetCommand(FileManager fileManager) {
+    public ValidateCommand(FileManager fileManager) {
         this.fileManager = fileManager;
     }
 
     /**
-     * Executes the set command.
-     * Updates the value at the specified path with the new string provided.
-     * Prints error messages if no file is open, arguments are missing, or the key is not found.
+     * Executes the validation command.
      *
-     * @param arguments the arguments specifying the path and the new value (format: "path string")
+     * @param arguments optional arguments for the command (not used here)
      */
     @Override
     public void execute(String arguments) {
@@ -26,79 +25,89 @@ public class SetCommand implements Command {
             return;
         }
 
-        if (arguments == null || arguments.isBlank()) {
-            System.out.println("Usage: set <path> <string>");
+        if (fileManager.getCurrentFilePath() == null || !fileManager.getCurrentFilePath().toLowerCase().endsWith(".json")) {
+            System.out.println("Invalid JSON file.");
             return;
         }
-
-        String[] parts = arguments.trim().split("\\s+", 2);
-        if (parts.length < 2) {
-            System.out.println("Please provide both <path> and <string>.");
-            return;
-        }
-
-        String path = parts[0];
-        String newValue = parts[1];
-
-        if (!newValue.startsWith("\"") || !newValue.endsWith("\"")) {
-            newValue = "\"" + newValue + "\"";
-        }
-
-
-        String[] keys = path.split("\\.");
-        String lastKey = keys[keys.length - 1];
 
         String content = fileManager.getContent();
-
-        String updatedContent = replaceValueAfterKey(content, lastKey, newValue);
-
-        if (updatedContent == null) {
-            System.out.println("Key not found: " + lastKey);
+        if (content == null || content.isBlank() || content.trim().equals("{}")) {
+            System.out.println("File is empty.");
             return;
         }
 
-        fileManager.setContent(updatedContent);
-        System.out.println("Value updated successfully.");
+        if (validateJson(content)) {
+            System.out.println("JSON is valid.");
+        } else {
+            System.out.println("Invalid JSON syntax.");
+        }
     }
 
     /**
-     * Replaces the value associated with the given key in the JSON content with a new value.
+     * Validates the JSON string by checking balanced braces, brackets, quotes,
+     * and ensuring no content exists outside the main braces.
      *
-     * @param content the JSON content as a string
-     * @param key the key whose value should be replaced
-     * @param newValue the new value to set (must include quotes if it's a string)
-     * @return the updated JSON content or null if the key is not found
+     * @param json the JSON content to validate
+     * @return true if the JSON content is valid; false otherwise
      */
-    private String replaceValueAfterKey(String content, String key, String newValue) {
-        String searchKey = "\"" + key + "\"";
-        int keyPos = content.indexOf(searchKey);
-        if (keyPos == -1)
-            return null;
+    private boolean validateJson(String json) {
+        int curlyBraces = 0;
+        int squareBrackets = 0;
+        boolean insideMainBraces = false;
+        boolean contentOutsideMainBraces = false;
 
-        int colonPos = content.indexOf(":", keyPos + searchKey.length());
-        if (colonPos == -1)
-            return null;
+        int quoteCount = 0;
 
-        int valStart = colonPos + 1;
-        while (valStart < content.length() && Character.isWhitespace(content.charAt(valStart))) {
-            valStart++;
+        for (int i = 0; i < json.length(); i++) {
+            char c = json.charAt(i);
+
+            switch (c) {
+                case '{':
+                    curlyBraces++;
+                    if (curlyBraces == 1 && !insideMainBraces)
+                        insideMainBraces = true;
+                    break;
+
+                case '}':
+                    curlyBraces--;
+                    if (curlyBraces == 0 && insideMainBraces)
+                        insideMainBraces = false;
+                    else if (curlyBraces < 0)
+                        return false;
+                    break;
+
+                case '[':
+                    squareBrackets++;
+                    break;
+
+                case ']':
+                    squareBrackets--;
+                    if (squareBrackets < 0)
+                        return false;
+                    break;
+
+                case '"':
+                    if (i == 0 || json.charAt(i - 1) != '\\') {
+                        quoteCount++;
+                    }
+                    break;
+
+                default:
+                    if (!Character.isWhitespace(c) && !insideMainBraces)
+                        contentOutsideMainBraces = true;
+                    break;
+            }
         }
 
-        int valEnd = valStart;  // to be visible for "after"
-        boolean insideString = false;
-        for (; valEnd < content.length(); valEnd++) {
-            char c = content.charAt(valEnd);
-            if (c == '"' && (valEnd == valStart || content.charAt(valEnd - 1) != '\\')) {
-                insideString = !insideString;
-            }
-            if (!insideString && (c == ',' || c == '}' || c == ']')) {
-                break;
-            }
-        }
+        // valid only if
+        // - all curly braces and square brackets are balanced
+        // - no content outside main braces
+        // - quotes count is even (balanced)
 
-        String before = content.substring(0, valStart);
-        String after = content.substring(valEnd);
+        boolean bracesBalanced = (curlyBraces == 0);
+        boolean bracketsBalanced = (squareBrackets == 0);
+        boolean quotesBalanced = (quoteCount % 2 == 0);
 
-        return before + newValue + after;
+        return bracesBalanced && bracketsBalanced && !contentOutsideMainBraces && quotesBalanced;
     }
 }
