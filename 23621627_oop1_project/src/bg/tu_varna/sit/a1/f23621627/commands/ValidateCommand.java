@@ -56,7 +56,7 @@ public class ValidateCommand implements Command {
         boolean insideMainBraces = false;
         boolean contentOutsideMainBraces = false;
 
-        int quoteCount = 0;  // Counts unescaped double quotes
+        int quoteCount = 0;
 
         for (int i = 0; i < json.length(); i++) {
             char c = json.charAt(i);
